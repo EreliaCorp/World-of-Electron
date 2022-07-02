@@ -30,3 +30,5 @@
 *.exe
 *.out
 *.app
+/.vs/World of Electron/v17
+/Obj/Debug/x64
