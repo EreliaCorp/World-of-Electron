@@ -19,10 +19,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
+    <Image Include="ressource\texture\wall_spritesheet.png" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="ressource\texture\wall_spritesheet.png" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Structure\woe_engine.cpp" />
+    <ClCompile Include="src\Widget\Activity\woe_main_application_init_activity.cpp" />
+    <ClCompile Include="src\Widget\woe_iwidget.cpp" />
+    <ClCompile Include="src\Structure\woe_tilemap.cpp" />
+    <ClCompile Include="src\Widget\woe_main_application.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Widget\woe_main_application.h" />
+    <ClInclude Include="include\woe.h" />
+    <ClInclude Include="include\Structure\woe_engine.h" />
+    <ClInclude Include="include\Widget\woe_iwidget.h" />
+    <ClInclude Include="include\Structure\woe_tilemap.h" />
+    <ClInclude Include="include\woe_network.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ressource\configuration\configuration" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -90,7 +106,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>includes;$(IncludePath)</IncludePath>
+    <IncludePath>include;$(IncludePath)</IncludePath>
     <OutDir>$(ProjectDir)</OutDir>
     <IntDir>Obj\$(Configuration)\$(PlatformTarget)\</IntDir>
   </PropertyGroup>

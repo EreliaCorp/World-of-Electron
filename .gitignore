@@ -32,3 +32,4 @@
 *.app
 /.vs/World of Electron/v17
 /Obj/Debug/x64
+/.vs
