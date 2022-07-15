@@ -23,22 +23,36 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\woe_debug_screen.cpp" />
+    <ClCompile Include="src\woe_init_activity.cpp" />
+    <ClCompile Include="src\woe_iwidget.cpp" />
+    <ClCompile Include="src\woe_main_application.cpp" />
     <ClCompile Include="src\Structure\woe_engine.cpp" />
-    <ClCompile Include="src\Widget\Activity\woe_main_application_init_activity.cpp" />
-    <ClCompile Include="src\Widget\woe_iwidget.cpp" />
     <ClCompile Include="src\Structure\woe_tilemap.cpp" />
-    <ClCompile Include="src\Widget\woe_main_application.cpp" />
+    <ClCompile Include="src\woe_tilemap_manager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Widget\woe_main_application.h" />
     <ClInclude Include="include\woe.h" />
     <ClInclude Include="include\Structure\woe_engine.h" />
-    <ClInclude Include="include\Widget\woe_iwidget.h" />
     <ClInclude Include="include\Structure\woe_tilemap.h" />
+    <ClInclude Include="include\Utils\woe_configuration_file.h" />
+    <ClInclude Include="include\Widget\woe_debug_screen.h" />
+    <ClInclude Include="include\Utils\woe_event_handler.h" />
+    <ClInclude Include="include\Activity\woe_init_activity.h" />
+    <ClInclude Include="include\Widget\woe_iwidget.h" />
+    <ClInclude Include="include\Widget\woe_main_application.h" />
+    <ClInclude Include="include\Widget\woe_manager_widget.h" />
     <ClInclude Include="include\woe_network.h" />
+    <ClInclude Include="include\Widget\woe_tilemap_manager.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ressource\configuration\configuration" />
+    <None Include="ressource\configuration\config.conf" />
+    <None Include="ressource\UML\Classe\connection_screen.puml" />
+    <None Include="ressource\UML\Classe\engine.puml" />
+    <None Include="ressource\UML\Classe\entity.puml" />
+    <None Include="ressource\UML\Classe\map.puml" />
+    <None Include="ressource\UML\plantuml.jar" />
+    <None Include="ressource\UML\Classe\screens.puml" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

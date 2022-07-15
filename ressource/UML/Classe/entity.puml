@@ -1,0 +1,20 @@
+@startuml
+
+abstract Game_object
+{
+	Responsabilite :
+	- Stocke la position d'un object
+	- Stocke la lambda "on-hit" d'un object
+	- Stocke la lambda "on-contact" d'un object
+}
+
+class Entity
+{
+	Responsabilite :
+	- Stocke la forme/couleur d'une entite
+	- Stocke le shot-style d'une entite
+}
+
+Game_object <|-- Entity
+
+@enduml

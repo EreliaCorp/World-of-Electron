@@ -1,0 +1,40 @@
+@startuml
+
+hide empty members
+
+class Chunk
+{
+	Responsabilite :
+{field}	- Stocke l'etat du chunk (Mur / Vide / other tile)
+	- Permet le bakage du chunk puis son rendu
+}
+
+class Position
+{
+	type jgl::Vector2Int
+	Represente la position en 2D d'un objet
+}
+
+class Chunk_map
+{
+	type jgl::Map<Position, Chunk>
+	Responsabilite :
+{field}	- Lie une Entity a une ID
+}
+
+Chunk --* Chunk_map : Value
+Position --* Chunk_map : Key
+
+class Map
+{
+	Responsabilite :
+	Server :
+		- Generer la map suivant le format config
+		- Envoi les datas des chunks demandés
+	Client :
+		- Receptionne les chunks et les stocke
+}
+
+Chunk_map --* Map
+
+@enduml

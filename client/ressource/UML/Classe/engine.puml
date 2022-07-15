@@ -1,0 +1,50 @@
+@startuml
+
+!include map.puml
+!include entity.puml
+
+hide empty members
+
+class ID
+{
+	typedef jgl::Long
+	Represente une ID d'object dans l'engine
+}
+
+class Game_object_map
+{
+	type jgl::Map<ID, Game_object>
+	Responsabilite :
+{field}	- Lie un Game_object a une ID
+}
+
+Game_object --* Game_object_map : Value
+ID --* Game_object_map : Key
+
+class Entity_map
+{
+	type jgl::Map<ID, Entity>
+	Responsabilite :
+{field}	- Lie une Entity a une ID
+}
+
+Entity --* Entity_map : Value
+ID --* Entity_map : Key
+
+class Engine
+{
+	Responsalibite :
+	- Stocke l'etat de la map actuelle
+	- Stocke les entites actuellement en jeu
+
+	Actions : 
+	- Requete d'ID pour une entite
+{field}	- Requete d'un chunk (Pouvant etre nullptr)
+{field} - Requete de creation de chunk (Uniquement\naccessible pour le server)
+}
+
+Map --* Engine
+Game_object_map --* Engine
+Entity_map --* Engine
+
+@enduml

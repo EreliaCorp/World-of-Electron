@@ -26,16 +26,22 @@
     <ClCompile Include="src\Structure\woe_tilemap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Widget\woe_iwidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Structure\woe_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Widget\woe_main_application.cpp">
+    <ClCompile Include="src\woe_main_application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Widget\Activity\woe_main_application_init_activity.cpp">
+    <ClCompile Include="src\woe_debug_screen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\woe_init_activity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\woe_tilemap_manager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\woe_iwidget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,9 +50,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\woe.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Widget\woe_iwidget.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Structure\woe_engine.h">
@@ -58,8 +61,35 @@
     <ClInclude Include="include\Widget\woe_main_application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Utils\woe_event_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Widget\woe_debug_screen.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Utils\woe_configuration_file.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Activity\woe_init_activity.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Widget\woe_tilemap_manager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Widget\woe_iwidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Widget\woe_manager_widget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ressource\configuration\configuration" />
+    <None Include="ressource\UML\plantuml.jar" />
+    <None Include="ressource\UML\Classe\screens.puml" />
+    <None Include="ressource\UML\Classe\entity.puml" />
+    <None Include="ressource\UML\Classe\map.puml" />
+    <None Include="ressource\UML\Classe\engine.puml" />
+    <None Include="ressource\UML\Classe\connection_screen.puml" />
+    <None Include="ressource\configuration\config.conf" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 #include "structure/woe_tilemap.h"
-
+#include "Utils/woe_event_handler.h"
 
 void Chunk::randomize()
 {
@@ -112,6 +112,7 @@ void Tilemap::_randomize()
 	{
 		for (jgl::Size_t j = 0; j < C_SIZE; j++)
 		{
+			_placed_areas[i][j] = false;
 			this->chunk(jgl::Vector2Int(i, j))->randomize();
 		}
 	}
@@ -144,6 +145,47 @@ void Tilemap::generate()
 	{
 		_smooth();
 	}
+
+	unbake();
+}
+
+Message Tilemap::upload()
+{
+	Message result(Server_message::Map_content);
+
+	for (jgl::Size_t i = 0; i < Tilemap::C_SIZE; i++)
+	{
+		for (jgl::Size_t j = 0; j < Tilemap::C_SIZE; j++)
+		{
+			jgl::Vector2Int chunk_pos;
+
+			result << chunk_pos;
+
+			Chunk* tmp_chunk = Engine::instance()->map()->chunk(chunk_pos);
+
+			result.add_in_array(reinterpret_cast<jgl::Uchar*>(tmp_chunk->content()), sizeof(jgl::Short) * Chunk::C_SIZE * Chunk::C_SIZE * Chunk::C_DEPTH);
+		}
+	}
+
+	return (result);
+}
+
+void Tilemap::download(Message& p_msg)
+{
+	for (jgl::Size_t i = 0; i < Tilemap::C_SIZE; i++)
+	{
+		for (jgl::Size_t j = 0; j < Tilemap::C_SIZE; j++)
+		{
+			jgl::Vector2Int chunk_pos;
+
+			p_msg >> chunk_pos;
+
+			Chunk* tmp_chunk = Engine::instance()->map()->request_chunk(chunk_pos);
+
+			p_msg.load_from_array(reinterpret_cast<jgl::Uchar*>(tmp_chunk->content()), sizeof(jgl::Short) * Chunk::C_SIZE * Chunk::C_SIZE * Chunk::C_DEPTH);
+		}
+	}
+	Publisher::instance()->context()->downloading_map = false;
 }
 
 Tilemap::Tilemap()

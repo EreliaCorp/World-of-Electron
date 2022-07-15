@@ -4,8 +4,8 @@
 
 enum class Server_message
 {
-	Request_player_information,
-	Player_information,
+	Request_map_content,
+	Map_content
 };
 
 #define SERVER_PORT 65000
@@ -15,4 +15,6 @@ using Message = jgl::Message<Server_message>;
 using Server = jgl::Server<Server_message>;
 using Client = jgl::Client<Server_message>;
 using Server_manager = jgl::Server_manager<Server_message>;
+#define SERVER_ACTIVITY(p_msg_type) Server_manager::instance()->add_activity(p_msg_type, [&](Connection* p_client, Message& p_msg, jgl::Data_contener& p_param)
 using Client_manager = jgl::Client_manager<Server_message>;
+#define CLIENT_ACTIVITY(p_msg_type) Client_manager::instance()->add_activity(p_msg_type, [&](Message& p_msg, jgl::Data_contener& p_param)

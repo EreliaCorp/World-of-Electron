@@ -1,9 +1,10 @@
 #pragma once
 
 #include "jgl.h"
+#include "woe_network.h"
 
 using Node = jgl::INode;
-class Chunk : public jgl::IBakableChunk<Node, 64>
+class Chunk : public jgl::IBakableChunk<Node, 15>
 {
 private:
 
@@ -30,5 +31,7 @@ private:
 
 public:
 	Tilemap();
+	Message upload();
+	void download(Message& p_msg);
 	void generate();
 };

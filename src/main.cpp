@@ -6,7 +6,7 @@ int main()
 	app.set_default_font("ressource/font/karma suture.ttf");
 	app.active_multithread();
 
-	Main_application* main_app = new Main_application(nullptr);
+	Main_application *main_app = new Main_application(nullptr);
 	main_app->set_geometry(0, app.size());
 	main_app->activate();
 

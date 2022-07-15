@@ -1,0 +1,61 @@
+@startuml
+
+hide empty members
+
+abstract Abstract_screen
+{
+	Responsabilite :
+	Instancier les interactions server/client
+
+	Methodes abstraites:
+{field}	- initialize_server() = 0
+{field}	- initialize_client() = 0
+{field}	- focus() = 0
+{field}	- unfocus() = 0
+}
+
+class Connection_screen
+{
+
+}
+
+Abstract_screen <|-- Connection_screen
+
+class Main_screen
+{
+
+}
+
+Abstract_screen <|-- Main_screen
+
+class Main_application
+{
+	Responsabilite : 
+	Contenir tout le programme
+	- Le programme sera separe en "Screen" pour sequencer\nl'organisation du jeu
+
+	Event :
+	- Init
+	- Idle
+	- Go_connection
+	- Go_game
+	- Go_settings
+	- Quit_game
+
+	State mode :
+	- Init
+	- Idle
+
+	Activite :
+	- Init_activity : Responsable de toute la phase d'initialisation\ndu jeu - Loading des textures, etc etc
+	- Idle_activity : Ne fait rien
+
+	Action :
+	- Transition vers le menu XXX en fonction du state machine
+
+}
+
+In_game_screen --* Main_application
+Connection_screen --* Main_application
+
+@enduml
