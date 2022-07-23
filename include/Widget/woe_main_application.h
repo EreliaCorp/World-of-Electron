@@ -2,41 +2,36 @@
 
 #include "jgl.h"
 
-#include "Widget/woe_tilemap_manager.h"
-#include "Widget/woe_debug_screen.h"
+#include "widget/woe_abstract_manager.h"
 
-class Main_application : public jgl::Widget
+#include "Utils/woe_configuration_file.h"
+
+#include "structure/woe_board.h"
+#include "widget/woe_board_manager.h"
+#include "widget/woe_player_manager.h"
+#include "widget/woe_entity_manager.h"
+
+class Main_application : public jgl::Singleton_widget<Main_application>, public Abstract_manager
 {
-private:
+public:
+	friend class jgl::Singleton_widget<Main_application>;
+	
 	enum class State
 	{
-		Init,
+		Loading,
+		Connection,
+		Player_instantiation,
+		Board_instantiation,
 		Idle
 	};
-
-	jgl::String to_string(const State& p_value)
-	{
-		switch (p_value)
-		{
-		case State::Init:
-			return ("Init");
-		case State::Idle:
-			return ("Idle");
-		default:
-			return ("Unknow state");
-		}
-	}
-
 	using State_machine = jgl::State_machine<State>;
 
-	jgl::Timer _update_fps_timer;
-	jgl::Int _render_cmpt;
-	jgl::Int _update_cmpt;
+private:
+	Main_application(jgl::Widget* p_parent);
 
-	State_machine* _state_machine;
+	State_machine _state_machine;
 
-	Debug_screen* _debug_screen;
-	Tilemap_manager* _tilemap_manager;
+	Configuration_file _config_file;
 
 	void _render();
 	void _on_geometry_change();
@@ -44,9 +39,13 @@ private:
 	jgl::Bool _update();
 	jgl::Bool _fixed_update();
 
+	void _initiate_server();
+	void _initiate_client();
+
+	Board_manager* _board_manager;
+	Entity_manager* _entity_manager;
+	Player_manager* _player_manager;
 
 public:
-	Main_application(jgl::Widget* p_parent);
 
-	void set_state(State p_state);
 };

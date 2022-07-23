@@ -2,22 +2,31 @@
 
 #include "jgl.h"
 
-#include "woe_network.h"
-
-#include "Utils/woe_configuration_file.h"
-
-#include "structure/woe_engine.h"
-
 enum class Event
 {
-	Initialize_network,
-	Go_idle_mode
+	Start_loading,
+	Start_connection,
+	Configure_server_interaction,
+	Configure_client_interaction,
+	Start_player_instantiation,
+	Start_board_instantiation,
+	Resize_manager_widget,
+	Activating_manager_widget,
+	Desactivating_manager_widget,
+	Start_idle
 };
 
-struct Context
+class Event_handler : public jgl::Singleton<jgl::Publisher<Event>>
 {
-	Configuration_file config;
-	jgl::Bool downloading_map;
-};
+	friend jgl::Singleton<jgl::Publisher<Event>>;
+public:
+	static void notify(Event p_event)
+	{
+		instance()->notify(p_event);
+	}
+	static void subscribe(Event p_event, jgl::Publisher<Event>::Activity p_funct)
+	{
+		instance()->subscribe(p_event, p_funct);
 
-using Publisher = jgl::Singleton<jgl::Publisher<Event, Context>>;
+	}
+};

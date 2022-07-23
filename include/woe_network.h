@@ -4,8 +4,12 @@
 
 enum class Server_message
 {
-	Request_map_content,
-	Map_content
+	Player_id,
+	Board_data,
+	Update_entity_data,
+	Entity_data,
+	Player_movement_command,
+	Player_movement_treated
 };
 
 #define SERVER_PORT 65000

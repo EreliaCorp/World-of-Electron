@@ -2,7 +2,7 @@
 
 #include "jgl.h"
 
-class IWidget : public jgl::Widget
+class IWidget : public virtual jgl::Widget
 {
 protected:
 	jgl::Vector2Int _convert_world_to_screen(jgl::Vector2 p_pos);

@@ -1,0 +1,31 @@
+@startuml
+
+hide empty members
+
+abstract Abstract_screen
+{
+	Responsabilite :
+	Instancier les interactions server/client
+
+	Methodes abstraites:
+{field}	- initialize_server() = 0
+{field}	- initialize_client() = 0
+{field}	- focus() = 0
+{field}	- unfocus() = 0
+}
+
+class Connection_screen
+{
+	Responsabilite :
+	- Permettre a l'utilisateur de rentrer son\nlogin/mot de passe
+
+	Event :
+	- Request_connection
+	- Connection_accepted
+	- Connection_refused
+}
+
+Abstract_screen <|-- Connection_screen
+
+
+@enduml
