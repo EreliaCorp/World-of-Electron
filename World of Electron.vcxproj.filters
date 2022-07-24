@@ -68,6 +68,9 @@
     <ClCompile Include="src\Widget\woe_debug_screen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Structure\woe_projectile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Structure\woe_board.h">

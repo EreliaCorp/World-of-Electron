@@ -125,7 +125,8 @@ jgl::Bool Player_manager::_update()
 
 	if (Debug_screen::instance()->update_timer().timeout() == true)
 	{
-		Debug_screen::instance()->set_text("Player pos : " + Engine::instance()->player()->pos().text(), 1, 0);
+		if (Engine::instance()->player() != nullptr)
+			Debug_screen::instance()->set_text("Player pos : " + Engine::instance()->player()->pos().text(), 1, 0);
 	}
 
 	return (false);

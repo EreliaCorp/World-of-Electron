@@ -76,15 +76,16 @@ void Entity_manager::_pull_entity_update(Message& p_msg)
 		p_msg >> id;
 		p_msg >> pos;
 
-		if (Engine::instance()->entity(id) == nullptr &&
-			_asked_entities[id] == false)
+		Entity* tmp_entity = Engine::instance()->entity(id);
+
+		if (tmp_entity == nullptr && _asked_entities[id] == false)
 		{
 			_asked_entities[id] = true;
 			result << id;
 		}
 		else
 		{
-			Engine::instance()->entity(id)->place(pos);
+			tmp_entity->place(pos);
 		}
 	}
 
@@ -118,6 +119,7 @@ void Entity_manager::_pull_entity_data(Message& p_msg)
 	while (p_msg.empty() == false)
 	{
 		Entity* result = _download_entity(p_msg);
+		_asked_entities[result->id()] = false;
 		if (result != nullptr)
 			Engine::instance()->add_entity(result);
 	}

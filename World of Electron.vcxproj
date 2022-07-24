@@ -31,6 +31,7 @@
     <ClCompile Include="src\Structure\woe_chunk.cpp" />
     <ClCompile Include="src\Structure\woe_engine.cpp" />
     <ClCompile Include="src\Structure\woe_entity.cpp" />
+    <ClCompile Include="src\Structure\woe_projectile.cpp" />
     <ClCompile Include="src\Widget\woe_board_manager.cpp" />
     <ClCompile Include="src\Widget\woe_debug_screen.cpp" />
     <ClCompile Include="src\Widget\woe_entity_manager.cpp" />
