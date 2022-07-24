@@ -24,7 +24,7 @@ void Connection_activity::execute()
 			THROW_INFORMATION("Server succesfully started");
 			Event_handler::notify(Event::Configure_server_interaction);
 		}
-		_state = State::Starting_client;
+		_set_state(State::Starting_client);
 		break;
 	}
 	case State::Starting_client:
@@ -34,7 +34,7 @@ void Connection_activity::execute()
 		Client_manager::instance()->activate();
 		THROW_INFORMATION("Client succesfully started");
 		Event_handler::notify(Event::Configure_client_interaction);
-		_state = State::Waiting_for_connection;
+		_set_state(State::Waiting_for_connection);
 		break;
 	}
 	case State::Waiting_for_connection:
@@ -43,7 +43,7 @@ void Connection_activity::execute()
 		if (Client_manager::instance()->client()->connection()->state() == Connection::State::Accepted)
 		{
 			THROW_INFORMATION("Connection complete");
-			_state = State::Completed;
+			_set_state(State::Completed);
 		}
 		break;
 	}
@@ -52,7 +52,7 @@ void Connection_activity::execute()
 	{
 		THROW_INFORMATION("=== CONNECTION COMPLETED ===");
 		THROW_INFORMATION("");
-		Event_handler::notify(Event::Start_player_instantiation);
+		Event_handler::notify(Event::Start_board_instantiation);
 		break;
 	}
 	}
@@ -67,5 +67,5 @@ void Connection_activity::on_transition()
 	}
 	THROW_INFORMATION("Instantiation of the client manager");
 	Client_manager::instanciate(_manager_owner);
-	_state = State::Starting_server;
+	_set_state(State::Starting_server);
 }

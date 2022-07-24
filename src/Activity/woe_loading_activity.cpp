@@ -21,7 +21,7 @@ void Loading_activity::execute()
 		THROW_INFORMATION("Server address : " + _config_file.server_address);
 		THROW_INFORMATION("Server port : " + jgl::itoa(_config_file.server_port));
 		THROW_INFORMATION("Server mode : " + jgl::String(_config_file.server_mode == true ? "true" : "false"));
-		_state = State::Loading_chunk;
+		_set_state(State::Loading_chunk);
 		break;
 	}
 	case State::Loading_chunk:
@@ -29,14 +29,14 @@ void Loading_activity::execute()
 		THROW_INFORMATION("Loading texture files");
 		Node::SIZE = 48;
 		Chunk::add_node(new Node(0, jgl::Vector2Int(0, 0), true, Node::OBSTACLE, 1));
-		_state = State::Instantiate_engine;
+		_set_state(State::Instantiate_engine);
 		break;
 	}
 	case State::Instantiate_engine:
 	{
 		THROW_INFORMATION("Instanciate engine");
 		Engine::instanciate();
-		_state = State::Completed;
+		_set_state(State::Completed);
 		break;
 	}
 	case State::Completed:
@@ -52,5 +52,5 @@ void Loading_activity::execute()
 void Loading_activity::on_transition()
 {
 	THROW_INFORMATION("=== ENTERING LOADING ACTIVITY ===");
-	_state = State::Loading_config_file;
+	_set_state(State::Loading_config_file);
 }

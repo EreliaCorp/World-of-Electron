@@ -15,14 +15,14 @@ void Idle_activity::execute()
 	{
 		THROW_INFORMATION("Resizing manager");
 		Event_handler::notify(Event::Resize_manager_widget);
-		_state = State::Activating_manager;
+		_set_state(State::Activating_manager);
 		break;
 	}
 	case State::Activating_manager:
 	{
 		THROW_INFORMATION("Activating manager");
 		Event_handler::notify(Event::Activating_manager_widget);
-		_state = State::Completed;
+		_set_state(State::Completed);
 		break;
 	}
 
@@ -35,5 +35,5 @@ void Idle_activity::execute()
 void Idle_activity::on_transition()
 {
 	THROW_INFORMATION("=== ENTERING IDLE ACTIVITY ===");
-	_state = State::Resizing_manager;
+	_set_state(State::Resizing_manager);
 }

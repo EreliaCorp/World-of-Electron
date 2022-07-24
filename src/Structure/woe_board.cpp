@@ -1,5 +1,7 @@
 #include "structure/woe_board.h"
 
+#include <bitset>
+
 jgl::Vector2Int Board::_direction_value[8] = {
 	jgl::Vector2Int(-1, -1),
 	jgl::Vector2Int(0, -1),
@@ -209,32 +211,9 @@ void Board::pull(Message& p_msg)
 	}
 }
 
-jgl::Bool Board::can_acces(jgl::Vector2Int p_start, jgl::Vector2Int p_direction)
+jgl::Bool Board::can_acces(jgl::Vector2 p_pos)
 {
-	jgl::Vector2 p_destination = p_start + p_direction;
-
-	jgl::Size_t index = 0;
-	for (index = 0; index < 8 && _direction_value[index] != p_direction; index++) {}
-
-	jgl::Short value = Node::WALKABLE;
-	jgl::Short destination_value = Node::WALKABLE;
-	for (jgl::Size_t i = 0; i < Chunk::C_DEPTH; i++)
-	{
-		jgl::Short pos_value = content(p_start, i);
-		jgl::Short destination_pos_value = content(p_destination, i);
-
-		if (i == 0 && pos_value == -1)
-			value = Node::WALKABLE;
-		if (i == 0 && destination_pos_value == -1)
-			destination_value = Node::WALKABLE;
-		if (pos_value >= 0)
-			value &= Chunk::node(pos_value)->obstacle;
-		if (destination_pos_value >= 0)
-			destination_value &= Chunk::node(destination_pos_value)->obstacle;
-	}
-
-	if ((value & _direction_mask[index]) != _direction_mask[index] ||
-		(destination_value & _rev_direction_mask[index]) != _rev_direction_mask[index])
+	if (content(p_pos, 0) != -1)
 		return (false);
 	return (true);
 }

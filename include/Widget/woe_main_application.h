@@ -2,8 +2,6 @@
 
 #include "jgl.h"
 
-#include "widget/woe_abstract_manager.h"
-
 #include "Utils/woe_configuration_file.h"
 
 #include "structure/woe_board.h"
@@ -11,7 +9,7 @@
 #include "widget/woe_player_manager.h"
 #include "widget/woe_entity_manager.h"
 
-class Main_application : public jgl::Singleton_widget<Main_application>, public Abstract_manager
+class Main_application : public jgl::Singleton_widget<Main_application>, public jgl::Widget
 {
 public:
 	friend class jgl::Singleton_widget<Main_application>;
@@ -22,8 +20,26 @@ public:
 		Connection,
 		Player_instantiation,
 		Board_instantiation,
-		Idle
+		In_game
 	};
+	jgl::String to_string(State p_state)
+	{
+		switch (p_state)
+		{
+		case (State::Loading):
+			return ("Loading");
+		case (State::Connection):
+			return ("Connection");
+		case (State::Player_instantiation):
+			return ("Player instantiation");
+		case (State::Board_instantiation):
+			return ("Board instantiation");
+		case (State::In_game):
+			return ("In game");
+		default:
+			return ("Undefined");
+		}
+	}
 	using State_machine = jgl::State_machine<State>;
 
 private:
@@ -39,8 +55,7 @@ private:
 	jgl::Bool _update();
 	jgl::Bool _fixed_update();
 
-	void _initiate_server();
-	void _initiate_client();
+	void _set_state(State p_state);
 
 	Board_manager* _board_manager;
 	Entity_manager* _entity_manager;

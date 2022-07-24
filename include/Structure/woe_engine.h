@@ -12,7 +12,10 @@ class Engine : public jgl::Singleton<Engine>
 private:
 	Board* _board;
 
+	std::mutex _entities_mutex;
 	jgl::Map<jgl::Long, Entity*> _entities;
+
+	jgl::Array<jgl::Long> _entities_to_delete;
 
 	jgl::Long _player_id;
 	Entity* _player;
@@ -20,9 +23,12 @@ private:
 	Engine();
 
 public:
-	void update();
+	void remove_entities();
+	void update(jgl::Ulong p_ticks);
 
 	jgl::Long request_id();
+
+	void cast_shoot(jgl::Long source_id, jgl::Vector2 p_origin, jgl::Vector2 p_direction);
 
 	Entity* entity_collision(Entity* p_entity, jgl::Vector2Int p_pos);
 
@@ -47,20 +53,8 @@ public:
 	}
 	jgl::Long player_id() { return (_player_id); }
 
-	void add_entity(Entity* p_entity)
-	{
-		if (_entities.count(p_entity->id()) != 0)
-			delete _entities[p_entity->id()];
-		_entities[p_entity->id()] = p_entity;
-	}
-
-	void remove_entity(Entity* p_entity)
-	{
-		auto tmp = _entities.find(p_entity->id());
-
-		if (tmp != _entities.end())
-			_entities.erase(tmp);
-	}
+	void add_entity(Entity* p_entity);
+	void remove_entity(Entity* p_entity);
 
 	jgl::Map<jgl::Long, Entity*>& entities()
 	{
@@ -69,7 +63,9 @@ public:
 	Entity* entity(jgl::Long p_id)
 	{
 		if (_entities.count(p_id) == 0)
+		{
 			return (nullptr);
+		}
 		return (_entities[p_id]);
 	}
 };

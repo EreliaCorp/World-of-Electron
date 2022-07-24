@@ -8,8 +8,8 @@ enum class Server_message
 	Board_data,
 	Update_entity_data,
 	Entity_data,
-	Player_movement_command,
-	Player_movement_treated
+	Player_movement,
+	Cast_shoot,
 };
 
 #define SERVER_PORT 65000

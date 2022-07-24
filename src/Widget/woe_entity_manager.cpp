@@ -1,5 +1,7 @@
 #include "widget/woe_entity_manager.h"
 #include "structure/woe_engine.h"
+#include "structure/woe_player.h"
+#include "structure/woe_projectile.h"
 
 void Entity_manager::_render()
 {
@@ -22,17 +24,26 @@ void Entity_manager::_on_geometry_change()
 
 jgl::Bool Entity_manager::_update()
 {
+
 	if (Server_manager::instance() != nullptr)
 	{
+		jgl::Ulong actual_tick = jgl::Application::active_application()->time();
+		jgl::Ulong delta_tick = actual_tick - _last_tick;
+		
 		if (_entity_updater_timer.timeout() == true)
 		{
 			_entity_updater_timer.start();
 
-			Engine::instance()->update();
+			Engine::instance()->remove_entities();
+
+			Engine::instance()->update(delta_tick);
 
 			_push_entity_update();
 		}
+
+		_last_tick = jgl::Application::active_application()->time();
 	}
+
 
 	return (false);
 }
@@ -91,9 +102,7 @@ void Entity_manager::_push_entity_data(Connection* p_client, Message& p_msg)
 		Entity* tmp_entity = Engine::instance()->entity(id);
 		if (tmp_entity != nullptr)
 		{
-			result << tmp_entity->id();
-			result << tmp_entity->type();
-			result << tmp_entity->pos();
+			_upload_entity(result, tmp_entity);
 		}
 	}
 
@@ -105,24 +114,102 @@ void Entity_manager::_pull_entity_data(Message& p_msg)
 {
 	while (p_msg.empty() == false)
 	{
-		jgl::Long id;
-		Entity::Type type;
-		jgl::Vector2 pos;
-
-		p_msg >> id;
-		p_msg >> type;
-		p_msg >> pos;
-
-		Entity* new_entity = new Entity(type, id);
-		new_entity->place(pos);
-
-		Engine::instance()->add_entity(new_entity);
+		Entity* result = _download_entity(p_msg);
+		if (result != nullptr)
+			Engine::instance()->add_entity(result);
 	}
 }
 
 jgl::Bool Entity_manager::_fixed_update()
 {
 	return (false);
+}
+
+void Entity_manager::_upload_entity(Message& p_msg, Entity* p_entity)
+{
+	p_msg << p_entity->id();
+	p_msg << p_entity->type();
+	p_msg << p_entity->pos();
+	switch (p_entity->type())
+	{
+		case Entity::Type::NPC:
+		{
+
+			break;
+		}
+		case Entity::Type::Object:
+		{
+
+			break;
+		}
+		case Entity::Type::Player:
+		{
+			p_msg << static_cast<Player*>(p_entity)->team();
+			break;
+		}
+		case Entity::Type::Projectile:
+		{
+			p_msg << static_cast<Projectile*>(p_entity)->source_id();
+			p_msg << p_entity->direction();
+			break;
+		}
+	}
+}
+
+Entity* Entity_manager::_download_entity(Message& p_msg)
+{
+	jgl::Long id;
+	Entity::Type type;
+	jgl::Vector2 pos;
+
+	p_msg >> id;
+	p_msg >> type;
+	p_msg >> pos;
+
+	Entity* result = nullptr;
+
+	switch (type)
+	{
+	case Entity::Type::NPC:
+	{
+		result = new Entity(type, id);
+		break;
+	}
+	case Entity::Type::Object:
+	{
+		result = new Entity(type, id);
+		break;
+	}
+	case Entity::Type::Player:
+	{
+		Player::Team team;
+
+		p_msg >> team;
+
+		result = new Player(team, id);
+
+		break;
+	}
+	case Entity::Type::Projectile:
+	{
+		jgl::Long source_id;
+		jgl::Vector2 direction;
+
+		p_msg >> source_id;
+		p_msg >> direction;
+
+		result = new Projectile(id, source_id, direction);
+
+		break;
+	}
+	}
+
+	if (result == nullptr)
+		return (nullptr);
+
+	result->place(pos);
+
+	return (result);
 }
 
 void Entity_manager::_initiate_server()
@@ -145,7 +232,8 @@ void Entity_manager::_initiate_client()
 	});
 }
 
-Entity_manager::Entity_manager(jgl::Widget* p_parent) : jgl::Widget(p_parent), Abstract_manager(p_parent), IWidget(p_parent)
+Entity_manager::Entity_manager(jgl::Widget* p_parent) : jgl::Widget(p_parent), Abstract_manager(p_parent), IWidget(p_parent),
+	_last_tick(jgl::Application::active_application()->time())
 {
 
 }

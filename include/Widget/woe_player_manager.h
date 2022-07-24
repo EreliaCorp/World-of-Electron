@@ -12,13 +12,17 @@ private:
 
 	jgl::Bool _update();
 	jgl::Bool _fixed_update();
-
+	
 	void _initiate_server();
 	void _initiate_client();
 
-	jgl::Bool _motion_command_send;
+	jgl::Timer _shoot_timer;
+	jgl::Bool _motion_command_treated;
+	jgl::Bool _shoot_command_treated;
 	void _push_motion_command(jgl::Vector2Int p_delta);
 	void _pull_motion_command(Message& p_msg);
+	void _push_shoot_command(jgl::Long p_source_id, jgl::Vector2 p_origin, jgl::Vector2 p_direction);
+	void _pull_shoot_command(Message& p_msg);
 
 public:
 	Player_manager(jgl::Widget* p_parent);

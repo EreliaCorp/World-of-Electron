@@ -7,13 +7,7 @@ jgl::Vector2Int IWidget::_convert_world_to_screen(jgl::Vector2 p_pos)
 
 	if (Engine::instance()->player() != nullptr)
 	{
-		static int i = 0;
-		if (i == 0)
-		{
-			jgl::cout << "Player id [" << Engine::instance()->player()->id() << "] - Pos [" << Engine::instance()->player()->pos() << "]" << jgl::endl;
-			i++;
-		}
-		result -= Engine::instance()->player()->pos() * Node::SIZE;
+		result -= (Engine::instance()->player()->pos() - 0.5f) * Node::SIZE;
 	}
 
 	return (result);
@@ -31,16 +25,10 @@ jgl::Vector2 IWidget::_convert_screen_to_world(jgl::Vector2Int p_pos)
 
 	if (Engine::instance()->player() != nullptr)
 	{
-		static int i = 0;
-		if (i == 0)
-		{
-			jgl::cout << "Player id [" << Engine::instance()->player()->id() << "] - Pos [" << Engine::instance()->player()->pos() << "]" << jgl::endl;
-			i++;
-		}
-		result += Engine::instance()->player()->pos();
+		result += (Engine::instance()->player()->pos() - 0.5f);
 	}
 
-	return (result.floor());
+	return (result);
 }
 
 jgl::Vector2Int IWidget::_convert_screen_to_chunk(jgl::Vector2Int p_pos)

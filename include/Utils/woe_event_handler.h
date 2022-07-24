@@ -13,7 +13,7 @@ enum class Event
 	Resize_manager_widget,
 	Activating_manager_widget,
 	Desactivating_manager_widget,
-	Start_idle
+	Start_game
 };
 
 class Event_handler : public jgl::Singleton<jgl::Publisher<Event>>

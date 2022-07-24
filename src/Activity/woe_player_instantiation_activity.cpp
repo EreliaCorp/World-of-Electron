@@ -17,7 +17,7 @@ void Player_init_activity::execute()
 	{
 		THROW_INFORMATION("Requesting player data");
 		Client_manager::send(Server_message::Player_id);
-		_state = State::Waiting_data;
+		_set_state(State::Waiting_data);
 		break;
 	}
 	case State::Waiting_data:
@@ -27,7 +27,7 @@ void Player_init_activity::execute()
 		{
 			THROW_INFORMATION("Player information received");
 			THROW_INFORMATION("Player ID : " + jgl::itoa(Engine::instance()->player_id()));
-			_state = State::Completed;
+			_set_state(State::Completed);
 		}
 		break;
 	}
@@ -36,7 +36,7 @@ void Player_init_activity::execute()
 	{
 		THROW_INFORMATION("=== PLAYER INITIATION COMPLETED ===");
 		THROW_INFORMATION("");
-		Event_handler::notify(Event::Start_board_instantiation);
+		Event_handler::notify(Event::Start_game);
 		break;
 	}
 	}
@@ -45,5 +45,5 @@ void Player_init_activity::execute()
 void Player_init_activity::on_transition()
 {
 	THROW_INFORMATION("=== ENTERING PLAYER INITIATION ACTIVITY ===");
-	_state = State::Request_data;
+	_set_state(State::Request_data);
 }

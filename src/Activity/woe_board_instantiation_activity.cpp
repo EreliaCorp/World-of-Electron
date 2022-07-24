@@ -18,9 +18,9 @@ void Board_init_activity::execute()
 	{
 		THROW_INFORMATION("Reseting board information");
 		if (_config_file.server_mode == true)
-			_state = State::Generate_data;
+			_set_state(State::Generate_data);
 		else
-			_state = State::Request_data;
+			_set_state(State::Request_data);
 		break;
 	}
 	case State::Generate_data:
@@ -28,14 +28,14 @@ void Board_init_activity::execute()
 		THROW_INFORMATION("Generating board data");
 		Engine::instance()->create_board();
 		Engine::instance()->board()->generate();
-		_state = State::Unbake;
+		_set_state(State::Unbake);
 		break;
 	}
 	case State::Request_data:
 	{
 		THROW_INFORMATION("Requesting board data");
 		Client_manager::send(Server_message::Board_data);
-		_state = State::Waiting_data;
+		_set_state(State::Waiting_data);
 		break;
 	}
 	case State::Waiting_data:
@@ -44,7 +44,7 @@ void Board_init_activity::execute()
 		if (Engine::instance()->board() != nullptr)
 		{
 			THROW_INFORMATION("Board information received");
-			_state = State::Unbake;
+			_set_state(State::Unbake);
 		}
 		break;
 	}
@@ -52,7 +52,7 @@ void Board_init_activity::execute()
 	{
 		THROW_INFORMATION("Unbaking board");
 		Engine::instance()->board()->unbake();
-		_state = State::Completed;
+		_set_state(State::Completed);
 		break;
 	}
 
@@ -60,7 +60,7 @@ void Board_init_activity::execute()
 	{
 		THROW_INFORMATION("=== BOARD INITIATION COMPLETED ===");
 		THROW_INFORMATION("");
-		Event_handler::notify(Event::Start_idle);
+		Event_handler::notify(Event::Start_player_instantiation);
 		break;
 	}
 	}
@@ -69,5 +69,5 @@ void Board_init_activity::execute()
 void Board_init_activity::on_transition()
 {
 	THROW_INFORMATION("=== ENTERING BOARD INITIATION ACTIVITY ===");
-	_state = State::Reset_data;
+	_set_state(State::Reset_data);
 }

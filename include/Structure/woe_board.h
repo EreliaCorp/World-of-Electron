@@ -46,5 +46,5 @@ public:
 	void push(Message& p_msg);
 	void pull(Message& p_msg);
 
-	jgl::Bool can_acces(jgl::Vector2Int p_start, jgl::Vector2Int p_direction);
+	jgl::Bool can_acces(jgl::Vector2 p_pos);
 };
