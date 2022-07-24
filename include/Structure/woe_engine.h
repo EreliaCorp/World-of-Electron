@@ -12,7 +12,7 @@ class Engine : public jgl::Singleton<Engine>
 private:
 	Board* _board;
 
-	std::mutex _entities_mutex;
+	std::recursive_mutex _entities_mutex;
 	jgl::Map<jgl::Long, Entity*> _entities;
 
 	jgl::Array<jgl::Long> _entities_to_delete;
@@ -23,7 +23,11 @@ private:
 	Engine();
 
 public:
+	void lock_entities_mutex() { _entities_mutex.lock(); }
+	void unlock_entities_mutex() { _entities_mutex.unlock(); }
+
 	void remove_entities();
+
 	void update(jgl::Ulong p_ticks);
 
 	jgl::Long request_id();
@@ -55,6 +59,7 @@ public:
 
 	void add_entity(Entity* p_entity);
 	void remove_entity(Entity* p_entity);
+	void remove_entity(jgl::Long p_id);
 
 	jgl::Map<jgl::Long, Entity*>& entities()
 	{

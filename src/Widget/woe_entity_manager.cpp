@@ -1,11 +1,13 @@
 #include "widget/woe_entity_manager.h"
+#include "widget/woe_debug_screen.h"
 #include "structure/woe_engine.h"
 #include "structure/woe_player.h"
 #include "structure/woe_projectile.h"
 
 void Entity_manager::_render()
 {
-	for (std::pair<jgl::Long, Entity*> tmp : Engine::instance()->entities())
+	Engine::instance()->lock_entities_mutex();
+	for (auto tmp : Engine::instance()->entities())
 	{
 		if (tmp.second != nullptr)
 		{
@@ -15,6 +17,7 @@ void Entity_manager::_render()
 			tmp.second->render(anchor, Node::SIZE, depth);
 		}
 	}
+	Engine::instance()->unlock_entities_mutex();
 }
 
 void Entity_manager::_on_geometry_change()
@@ -24,26 +27,26 @@ void Entity_manager::_on_geometry_change()
 
 jgl::Bool Entity_manager::_update()
 {
-
-	if (Server_manager::instance() != nullptr)
+	if (_entity_updater_timer.timeout() == true)
 	{
+		_entity_updater_timer.start();
+
 		jgl::Ulong actual_tick = jgl::Application::active_application()->time();
 		jgl::Ulong delta_tick = actual_tick - _last_tick;
-		
-		if (_entity_updater_timer.timeout() == true)
+
+		Debug_screen::instance()->set_text("Nb of entities : " + jgl::itoa(Engine::instance()->entities().size()), 1, 1);
+
+		Engine::instance()->remove_entities();
+
+		if (Server_manager::instance() != nullptr)
 		{
-			_entity_updater_timer.start();
-
-			Engine::instance()->remove_entities();
-
 			Engine::instance()->update(delta_tick);
 
 			_push_entity_update();
 		}
 
-		_last_tick = jgl::Application::active_application()->time();
+		_last_tick = actual_tick;
 	}
-
 
 	return (false);
 }
@@ -117,6 +120,18 @@ void Entity_manager::_pull_entity_data(Message& p_msg)
 		Entity* result = _download_entity(p_msg);
 		if (result != nullptr)
 			Engine::instance()->add_entity(result);
+	}
+}
+
+void Entity_manager::_pull_entity_suppression(Message& p_msg)
+{
+	while (p_msg.empty() == false)
+	{
+		jgl::Long id;
+
+		p_msg >> id;
+
+		Engine::instance()->remove_entity(id);
 	}
 }
 
@@ -221,19 +236,24 @@ void Entity_manager::_initiate_server()
 
 void Entity_manager::_initiate_client()
 {
-	if (Server_manager::instance() == nullptr)
-	{
-		CLIENT_ACTIVITY(Server_message::Update_entity_data) {
+	CLIENT_ACTIVITY(Server_message::Update_entity_data) {
+		if (Server_manager::instance() == nullptr)
 			_pull_entity_update(p_msg);
-		});
-	}
+	});
+
 	CLIENT_ACTIVITY(Server_message::Entity_data) {
 		_pull_entity_data(p_msg);
+	});
+	
+	CLIENT_ACTIVITY(Server_message::Delete_entity) {
+		if (Server_manager::instance() == nullptr)
+			_pull_entity_suppression(p_msg);
 	});
 }
 
 Entity_manager::Entity_manager(jgl::Widget* p_parent) : jgl::Widget(p_parent), Abstract_manager(p_parent), IWidget(p_parent),
-	_last_tick(jgl::Application::active_application()->time())
+	_last_tick(jgl::Application::active_application()->time()),
+	_entity_updater_timer(15)
 {
 
 }

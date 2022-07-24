@@ -1,5 +1,6 @@
 #include "structure/woe_engine.h"
 #include "structure/woe_projectile.h"
+#include "Utils/woe_event_handler.h"
 
 Engine::Engine() :
 	_board(nullptr)
@@ -9,13 +10,31 @@ Engine::Engine() :
 
 void Engine::remove_entities()
 {
+	if (_entities_to_delete.size() == 0)
+		return;
+
+	lock_entities_mutex();
+
+	Message msg(Server_message::Delete_entity);
+
 	for (jgl::Size_t i = 0; i < _entities_to_delete.size(); i++)
 	{
-		if (_player->id() == _entities_to_delete[i])
-			_player = nullptr;
-		delete _entities[_entities_to_delete[i]];
-		_entities.erase(_entities_to_delete[i]);
+		jgl::Long key = _entities_to_delete[i];
+		if (_entities.count(key) != 0)
+		{
+			if (Server_manager::instance() != nullptr)
+				msg << key;
+			if (_player->id() == key)
+				_player = nullptr;
+			delete _entities[key];
+			_entities.erase(key);
+		}
 	}
+	unlock_entities_mutex();
+
+	if (Server_manager::instance() != nullptr)
+		Server_manager::instance()->send_to_all(msg);
+
 	_entities_to_delete.clear();
 }
 
@@ -41,11 +60,15 @@ void Engine::remove_entity(Entity* p_entity)
 {
 	_entities_to_delete.push_back(p_entity->id());
 }
+void Engine::remove_entity(jgl::Long p_id)
+{
+	_entities_to_delete.push_back(p_id);
+}
 
 jgl::Long Engine::request_id()
 {
 	jgl::Long result = 0;
-	for (; _entities.count(result) != 0; result++) {}
+	for (; _entities.count(result) != 0 || _entities[result] != nullptr; result++) {}
 	return (result);
 }
 

@@ -13,7 +13,8 @@ public:
 	Projectile(jgl::Long id, jgl::Long p_source_id, jgl::Vector2 p_direction) : Entity(Type::Projectile, id),
 		_source_id(p_source_id)
 	{
-		_size = 0.1f;
+		_move_speed = 100;
+		_size = 0.2f;
 		move(p_direction);
 	}
 

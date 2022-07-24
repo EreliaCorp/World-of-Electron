@@ -24,6 +24,7 @@ private:
 	void _pull_entity_update(Message& p_msg);
 	void _push_entity_data(Connection* p_client, Message& p_msg);
 	void _pull_entity_data(Message& p_msg);
+	void _pull_entity_suppression(Message& p_msg);
 
 	jgl::Timer _entity_updater_timer = jgl::Timer(8);
 	jgl::Map<jgl::Long, jgl::Bool> _asked_entities;

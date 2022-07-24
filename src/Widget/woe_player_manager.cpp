@@ -5,6 +5,14 @@
 
 #include "structure/woe_projectile.h"
 
+Player_manager::Player_manager(jgl::Widget* p_parent) : jgl::Widget(p_parent), Abstract_manager(p_parent), IWidget(p_parent),
+_motion_command_treated(true),
+_shoot_command_treated(true),
+_shoot_timer(250)
+{
+	Chunk::set_node_texture(new jgl::Sprite_sheet("ressource/texture/wall_spritesheet.png", jgl::Vector2Int(24, 12)));
+}
+
 void Player_manager::_render()
 {
 	
@@ -90,7 +98,7 @@ jgl::Bool Player_manager::_update()
 		if (jgl::Application::active_application()->mouse().get_button(jgl::Mouse_button::Left) == jgl::Input_status::Down)
 		{
 			jgl::Vector2 origin = Engine::instance()->player()->pos();
-			jgl::Vector2 direction = (_convert_screen_to_world(jgl::Application::active_application()->mouse().pos()) - 0.5f - origin).normalize();
+			jgl::Vector2 direction = (_convert_screen_to_world(jgl::Application::active_application()->mouse().pos()) - origin).normalize();
 
 			_push_shoot_command(Engine::instance()->player_id(), origin, direction);
 			_shoot_timer.start();
@@ -176,12 +184,4 @@ void Player_manager::_initiate_client()
 	CLIENT_ACTIVITY(Server_message::Cast_shoot) {
 		_shoot_command_treated = true;
 	});
-}
-
-Player_manager::Player_manager(jgl::Widget* p_parent) : jgl::Widget(p_parent), Abstract_manager(p_parent), IWidget(p_parent),
-	_motion_command_treated(true),
-	_shoot_command_treated(true),
-	_shoot_timer(200)
-{
-	Chunk::set_node_texture(new jgl::Sprite_sheet("ressource/texture/wall_spritesheet.png", jgl::Vector2Int(24, 12)));
 }

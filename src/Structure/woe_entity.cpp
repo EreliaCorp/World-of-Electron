@@ -5,9 +5,9 @@ Entity::Entity(Type p_type, jgl::Long p_id)
 {
 	_type = p_type;
 	_id = p_id;
-	_size = 1;
+	_size = 0.8f;
 	_direction = jgl::Vector2(1, 0);
-	_move_speed = 10u;
+	_move_speed = 100u;
 	_is_moving = false;
 }
 
@@ -53,9 +53,9 @@ void Entity::update(jgl::Ulong p_ticks)
 
 jgl::Bool Entity::can_move(jgl::Vector2 p_delta)
 {
-	for (jgl::Float x = -_size.x / 2; x <= _size.x / 2; x++)
+	for (jgl::Float x = -_size.x / 2.0f; x <= _size.x / 2.0f; x += _size.x)
 	{
-		for (jgl::Float y = -_size.y / 2; y <= _size.y / 2; y++)
+		for (jgl::Float y = -_size.y / 2.0f; y <= _size.y / 2.0f; y += _size.y)
 		{
 			if (Engine::instance()->board()->can_acces(_pos + p_delta + jgl::Vector2(x, y)) == false)
 				return (false);

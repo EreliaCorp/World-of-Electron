@@ -10,6 +10,7 @@ enum class Server_message
 	Entity_data,
 	Player_movement,
 	Cast_shoot,
+	Delete_entity
 };
 
 #define SERVER_PORT 65000
